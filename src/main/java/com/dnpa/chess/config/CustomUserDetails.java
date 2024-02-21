@@ -13,8 +13,8 @@ import com.dnpa.chess.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
+//@Data
+//@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 	User user;
     @Override
@@ -59,4 +59,10 @@ public class CustomUserDetails implements UserDetails {
     public void setUser(User user) {
         this.user = user;
     }
+
+	public CustomUserDetails(User user) {
+		super();
+		this.user = user;
+	}
+    
 }

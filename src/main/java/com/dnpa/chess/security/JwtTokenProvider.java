@@ -16,7 +16,6 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 @Component
-@Slf4j
 public class JwtTokenProvider {
 	private static final String SECRET_KEY = "dnpa";
 	private static final long EXPIRE_TIME = 604800000L;
@@ -37,13 +36,13 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
+//            log.error("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
+//            log.error("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
+//            log.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
+//            log.error("JWT claims string is empty.");
         }
         return false;
     }
