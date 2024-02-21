@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-21T14:54:29+0700",
+    date = "2024-02-21T15:30:51+0700",
     comments = "version: 1.4.1.Final, compiler: Eclipse JDT (IDE) 3.36.0.v20231114-0937, environment: Java 17.0.9 (Oracle Corporation)"
 )
 @Component
@@ -57,10 +57,10 @@ public class UserMapperImpl implements UserMapper {
         Game game = new Game();
 
         game.setId( gameDto.getId() );
-        game.setPlayerSide( gameDto.getPlayerSide() );
-        game.setWinner( gameDto.getWinner() );
-        game.setResult( gameDto.getResult() );
         game.setMove( gameDto.getMove() );
+        game.setPlayerSide( gameDto.getPlayerSide() );
+        game.setResult( gameDto.getResult() );
+        game.setWinner( gameDto.getWinner() );
 
         return game;
     }

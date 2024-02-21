@@ -9,7 +9,7 @@ import com.dnpa.chess.entity.User;
 
 import lombok.Data;
 
-@Data
+//@Data
 public class GameDto {
 	
 	private int id;
@@ -21,4 +21,69 @@ public class GameDto {
 	private int levelId;
 	
 	private int userId;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPlayerSide() {
+		return playerSide;
+	}
+
+	public void setPlayerSide(String playerSide) {
+		this.playerSide = playerSide;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
+	}
+
+	public String getMove() {
+		return move;
+	}
+
+	public void setMove(String move) {
+		this.move = move;
+	}
+
+	public String getFen() {
+		return fen;
+	}
+
+	public void setFen(String fen) {
+		this.fen = fen;
+	}
+
+	public int getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(int levelId) {
+		this.levelId = levelId;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
 }
