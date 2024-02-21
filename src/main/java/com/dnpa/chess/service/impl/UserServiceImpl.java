@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService{
 		SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.generateToken(authentication);
         user = findUserByUsername(user.getUsername());
-        
-		return new JwtResponse(user.getId(), jwt, "Beared ", user.getUsername(), user.getHoTen(), user.getRole());
+        return new JwtResponse(jwt, user.getId(), user.getUsername(), user.getHoTen(), user.getRole());
+//		return new JwtResponse(user.getId(), jwt, "Beared ", user.getUsername(), user.getHoTen(), user.getRole());
 	}
 	@Override
 	public void saveUser(User user) {

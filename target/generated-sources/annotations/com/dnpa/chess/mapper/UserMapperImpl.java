@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-21T15:30:51+0700",
-    comments = "version: 1.4.1.Final, compiler: Eclipse JDT (IDE) 3.36.0.v20231114-0937, environment: Java 17.0.9 (Oracle Corporation)"
+    date = "2024-02-21T19:41:21+0700",
+    comments = "version: 1.4.1.Final, compiler: javac, environment: Java 17.0.9 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -24,12 +24,12 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
-        user.setEmail( signUpDto.getEmail() );
-        user.setGioiTinh( signUpDto.isGioiTinh() );
         user.setHoTen( signUpDto.getHoTen() );
-        user.setPassword( signUpDto.getPassword() );
-        user.setSoDienThoai( signUpDto.getSoDienThoai() );
         user.setUsername( signUpDto.getUsername() );
+        user.setPassword( signUpDto.getPassword() );
+        user.setEmail( signUpDto.getEmail() );
+        user.setSoDienThoai( signUpDto.getSoDienThoai() );
+        user.setGioiTinh( signUpDto.isGioiTinh() );
 
         return user;
     }
@@ -42,8 +42,8 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
-        user.setPassword( signInDto.getPassword() );
         user.setUsername( signInDto.getUsername() );
+        user.setPassword( signInDto.getPassword() );
 
         return user;
     }
@@ -57,10 +57,10 @@ public class UserMapperImpl implements UserMapper {
         Game game = new Game();
 
         game.setId( gameDto.getId() );
-        game.setMove( gameDto.getMove() );
         game.setPlayerSide( gameDto.getPlayerSide() );
-        game.setResult( gameDto.getResult() );
         game.setWinner( gameDto.getWinner() );
+        game.setResult( gameDto.getResult() );
+        game.setMove( gameDto.getMove() );
 
         return game;
     }
