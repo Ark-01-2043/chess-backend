@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.dto.SignUpDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.exception.HttpResponse;
@@ -33,6 +34,8 @@ public class ProfileApi {
 		return ResponseEntity.ok(userService.getUserFromToken(token));
 		
 	}
+	@GetMapping
+	public ResponseEntity<ResponseObject> getOverall()
 	@PutMapping	
 	public ResponseEntity<?> getUserFromToken(@RequestBody SignUpDto signUpDto){
 		 
