@@ -1,0 +1,7 @@
+com\dnpa\chess\config\CustomUserDetailsService.class
+com\dnpa\chess\security\JwtAuthenticationFilter.class
+com\dnpa\chess\entity\User.class
+com\dnpa\chess\security\SecurityConfig.class
+com\dnpa\chess\security\JwtTokenProvider.class
+com\dnpa\chess\repository\UserRepo.class
+com\dnpa\chess\entity\Role.class

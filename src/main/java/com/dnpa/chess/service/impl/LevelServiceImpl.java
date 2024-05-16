@@ -23,9 +23,9 @@ public class LevelServiceImpl implements LevelService{
 	}
 
 	@Override
-	public void saveLevel(Level level) {
+	public Level saveLevel(Level level) {
 		// TODO Auto-generated method stub
-		levelRepository.save(level);
+		return levelRepository.save(level);
 	}
 
 	@Override

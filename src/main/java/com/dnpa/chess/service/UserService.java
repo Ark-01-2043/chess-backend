@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dnpa.chess.dto.ChangePasswordDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.repository.UserRepo;
 import com.dnpa.chess.security.JwtResponse;
@@ -25,4 +26,6 @@ public interface UserService {
 	public void deleteUser(int id);
 	public User getUserFromToken(String token);
 	public User updateProfile(User user) throws Exception;
+	User changePassword(String token, ChangePasswordDto changePasswordDto) throws Exception;
+	List<User> getAllUsersNotAdmin();
 }

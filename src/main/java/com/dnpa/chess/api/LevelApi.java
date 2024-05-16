@@ -1,17 +1,20 @@
 package com.dnpa.chess.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dnpa.chess.dto.AlgorithmDTO;
+
 import com.dnpa.chess.dto.LevelDto;
+import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.entity.Level;
 import com.dnpa.chess.service.AlgorithmService;
 import com.dnpa.chess.service.LevelService;
@@ -31,6 +34,18 @@ public class LevelApi {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> get(@PathVariable(name = "id") int id){
 		return ResponseEntity.ok(levelService.getLevelById(id));
+	}
+	@PostMapping
+	public ResponseEntity<ResponseObject> addLevel(@RequestBody LevelDto levelDto){
+		Level level = Level.builder().algorithm(algorithmService.getAlgorithmById(levelDto.getAlgorithmId()))
+									.depth(levelDto.getDepth())
+									.name(levelDto.getName())
+									.build();
+		Level newLevel = levelService.saveLevel(level);
+		return ResponseEntity.ok(ResponseObject.builder().data(newLevel)
+														.message("Thêm thành công")
+														.status(HttpStatus.OK)
+														.build());		
 	}
 	@PutMapping
 	public ResponseEntity<?> put(@RequestBody LevelDto levelDto){

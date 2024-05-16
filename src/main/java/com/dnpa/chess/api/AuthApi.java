@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.dto.SignInDto;
 import com.dnpa.chess.dto.SignUpDto;
 import com.dnpa.chess.entity.User;
@@ -52,11 +53,12 @@ public class AuthApi {
 	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto){
 		System.out.println("sign up");
 //		System.out.println(authentication);
+		
 		if (userService.findUserByUsername(signUpDto.getUsername()) != null) {
-			return ResponseEntity.badRequest().body(new HttpResponse("Tên đăng nhập đã tồn tại"));
+			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Tên đăng nhập đã tồn tại").build());
 		}
 		if (userService.findUserByEmail(signUpDto.getEmail()) != null) {
-			return ResponseEntity.badRequest().body(new HttpResponse("Email đã tồn tại"));
+			return ResponseEntity.badRequest().body(ResponseObject.builder().message(("Email đã tồn tại")).build());
 		}
 		User user = userMapper.map(signUpDto);
 		userService.addUser(user);
@@ -74,21 +76,21 @@ public class AuthApi {
 			}
 			if (authentication != null) {
 				System.out.println("Signed in");
-				return ResponseEntity.badRequest().body(new HttpResponse("Đã đăng nhập"));
+				return ResponseEntity.badRequest().body(ResponseObject.builder().message("Đã đăng nhập").build());
 			}
 			return ResponseEntity.ok(userService.loginAsUser(userMapper.map(signInDto)));
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e);
 //			throw new ResourceException("Sai thông tin đăng nhập");
-			return ResponseEntity.badRequest().body(new HttpResponse("Sai thông tin đăng nhập"));
+			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Sai thông tin đăng nhập").build());
 		}
 		
 	}
 	@GetMapping("/signout")
 	public ResponseEntity<?> signOut(HttpServletRequest request, HttpServletResponse response){
 		userService.logOutAsUser(request, response);
-		return ResponseEntity.ok(new HttpResponse("Đăng xuất thành công")); 
+		return ResponseEntity.ok(ResponseObject.builder().message("Đăng xuất thành công").build()); 
 	}
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -101,7 +103,7 @@ public class AuthApi {
 		}
 	    System.out.println("method: " + ex.getMessage());
 //	    throw new ResourceException(ex.getMessage());
-	    return ResponseEntity.badRequest().body(new HttpResponse(ex.getMessage()));
+	    return ResponseEntity.badRequest().body(ResponseObject.builder().message(ex.getMessage()).build());
 	}
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -109,7 +111,7 @@ public class AuthApi {
 		MethodArgumentNotValidException ex) {
 	    System.out.println("method: " + ex.getAllErrors().get(0).getDefaultMessage());
 //	    throw new ResourceException(ex.getAllErrors().get(0).getDefaultMessage());
-	    return ResponseEntity.badRequest().body(new HttpResponse(ex.getAllErrors().get(0).getDefaultMessage()));
+	    return ResponseEntity.badRequest().body(ResponseObject.builder().message(ex.getAllErrors().get(0).getDefaultMessage()).build());
 	}
 
 	

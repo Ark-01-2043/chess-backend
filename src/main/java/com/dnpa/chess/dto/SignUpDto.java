@@ -10,7 +10,7 @@ import lombok.*;
 
 //@Data
 public class SignUpDto {
-
+	private Integer id;
 	@NotBlank(message = "Họ tên không để trống")
 	private String hoTen;
 	@NotBlank(message = "Tên đăng nhập không để trống")
@@ -60,6 +60,12 @@ public class SignUpDto {
 	}
 	public void setSoDienThoai(String soDienThoai) {
 		this.soDienThoai = soDienThoai;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public boolean isGioiTinh() {
 		return gioiTinh;

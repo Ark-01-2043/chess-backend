@@ -1,13 +1,18 @@
 package com.dnpa.chess.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dnpa.chess.dto.AlgorithmDTO;
+
+import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.entity.Algorithm;
 import com.dnpa.chess.entity.Level;
-import com.dnpa.chess.exception.HttpResponse;
 import com.dnpa.chess.service.AlgorithmService;
 import com.dnpa.chess.service.LevelService;
 
@@ -61,17 +66,62 @@ public class AlgorithmApi {
 			){
 		
 		if (multipartFile.isEmpty()) {
-			return ResponseEntity.badRequest().body(new HttpResponse("Không để file trống"));
+			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Không được để trống").status(HttpStatus.BAD_REQUEST).build());
 			
 		}
 		Algorithm algorithm = new Algorithm();
 		algorithm.setName(name);	
 		saveToStatic(multipartFile, multipartFile.getOriginalFilename());
 		algorithm.setPath(multipartFile.getOriginalFilename());
+		if (!testFile("src/main/resources/static/engine/" + multipartFile.getOriginalFilename())) {
+			return ResponseEntity.badRequest().body(ResponseObject.builder().data(algorithm)
+																	.message("File không hợp lệ")
+																	.status(HttpStatus.BAD_REQUEST).build());
+		}
+		
 		algorithmService.saveAlgorithm(algorithm);
 		return ResponseEntity.ok(algorithm);
 	}
-	
+	private boolean testFile(String path) {
+		Path filePath = Paths.get(path);
+		if (!Files.exists(filePath)) {
+			return false;
+		}
+		
+        try {
+        	String fen = "r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1";
+    		String[] command = {path, fen, "2"};
+    		Process process;
+    		process = Runtime.getRuntime().exec(command);
+    		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            
+            String line;
+            List<String> matrix	= new ArrayList<>();
+			while ((line = reader.readLine()) != null) {
+			    System.out.println(line);
+			    matrix.add(line);
+			}
+			int exitCode = process.waitFor();
+	        System.out.println("Exit code: " + exitCode);
+	        reader.close();
+	        if (exitCode == 0) {
+				return true;
+			}
+	        Files.delete(filePath);
+	        return false;
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			try {
+				Files.delete(filePath);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				return false;
+			}
+			return false;
+			
+		}
+        
+	}
 	private void saveToStatic(MultipartFile multipartFile, String name) {
 		Path savePath = Paths.get("src/main/resources/static/engine");
 		if (!Files.exists(savePath)) {

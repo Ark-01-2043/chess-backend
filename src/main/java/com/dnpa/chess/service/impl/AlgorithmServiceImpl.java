@@ -31,7 +31,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
 		// TODO Auto-generated method stub
 		algorithmRepository.save(algorithm);
 	}
-
+	
 	@Override
 	public void deleteAlgorithm(int id) {
 		// TODO Auto-generated method stub
@@ -43,5 +43,6 @@ public class AlgorithmServiceImpl implements AlgorithmService{
 		// TODO Auto-generated method stub
 		return algorithmRepository.findById(id).get();
 	}
+	
 
 }

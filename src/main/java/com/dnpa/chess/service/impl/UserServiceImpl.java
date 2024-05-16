@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import com.dnpa.chess.dto.ChangePasswordDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.repository.RoleRepository;
 import com.dnpa.chess.repository.UserRepo;
@@ -71,6 +72,10 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findAll();
 	}
 	@Override
+	public List<User> getAllUsersNotAdmin(){
+		return userRepository.findByRole(roleRepository.findById(1).get());
+	}
+	@Override
 	public void deleteUser(int id) {
 		// TODO Auto-generated method stub
 		userRepository.deleteById(id);
@@ -116,13 +121,26 @@ public class UserServiceImpl implements UserService{
 				throw new Exception("Email đã tồn tại");
 			}
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		if (!oldUser.getPassword().equals(user.getPassword()) ) {
-			throw new Exception("Mật khẩu không đúng");
-		}
-		user.setRole(roleRepository.findById(2).get());
-		userRepository.save(user);
-		return user;
+		oldUser.setEmail(user.getEmail());
+		oldUser.setHoTen(user.getHoTen());
+		oldUser.setSoDienThoai(user.getSoDienThoai());
+		oldUser.setGioiTinh(user.isGioiTinh());
+		return userRepository.save(oldUser);
+		
 	}
-
+	@Override
+	public User changePassword(String token, ChangePasswordDto changePasswordDto) throws Exception {
+		
+		String username = jwtTokenProvider.getUserNameFromJwtToken(token);
+		User user = findUserByUsername(username);
+		if (user == null) {
+			throw new Exception("Token không hợp lệ");
+		}
+		if (!passwordEncoder.matches(user.getPassword(), username)) {
+			throw new Exception("Mật khẩu không đúng");
+		}
+		user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+		return userRepository.save(user);
+		
+	}
 }

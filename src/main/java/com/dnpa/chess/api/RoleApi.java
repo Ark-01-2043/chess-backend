@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.entity.Role;
 import com.dnpa.chess.exception.HttpResponse;
 import com.dnpa.chess.service.RoleService;
@@ -25,6 +26,6 @@ public class RoleApi {
 	@PostMapping
 	public ResponseEntity<?> add(@RequestBody Role role){
 		roleService.addRole(role);
-		return ResponseEntity.ok(new HttpResponse("Thêm thành công"));
+		return ResponseEntity.ok(ResponseObject.builder().message("Thêm thành công").build());
 	}
 }
