@@ -21,7 +21,10 @@ import com.dnpa.chess.repository.UserRepo;
 import com.dnpa.chess.security.JwtResponse;
 import com.dnpa.chess.security.JwtTokenProvider;
 import com.dnpa.chess.service.UserService;
+
+import lombok.extern.slf4j.Slf4j;
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService{
 	}
 	@Override
 	public List<User> getAllUsersNotAdmin(){
-		return userRepository.findByRole(roleRepository.findById(1).get());
+		return userRepository.findByRole(roleRepository.findById(2).get());
 	}
 	@Override
 	public void deleteUser(int id) {
@@ -133,14 +136,28 @@ public class UserServiceImpl implements UserService{
 		
 		String username = jwtTokenProvider.getUserNameFromJwtToken(token);
 		User user = findUserByUsername(username);
+		
 		if (user == null) {
 			throw new Exception("Token không hợp lệ");
 		}
-		if (!passwordEncoder.matches(user.getPassword(), username)) {
+		if (!passwordEncoder.matches(changePasswordDto.getPassword(), user.getPassword())) {
+			System.out.println(changePasswordDto.getPassword());
+			System.out.println(user.getPassword());
 			throw new Exception("Mật khẩu không đúng");
 		}
 		user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
 		return userRepository.save(user);
 		
+	}
+	@Override
+	public User updateUser(User user) {
+		if (user != null && !user.getPassword().isEmpty() && !user.getPassword().isBlank()) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		} else {
+			user.setPassword(userRepository.findById(user.getId()).get().getPassword());
+		}
+		log.info("new passowrd" + user.getPassword());
+		System.out.println(("new passowrd" + user.getPassword()));
+		return userRepository.save(user);
 	}
 }

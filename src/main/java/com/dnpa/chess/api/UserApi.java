@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dnpa.chess.dto.ResponseObject;
 import com.dnpa.chess.dto.SignUpDto;
+import com.dnpa.chess.dto.UpdateUserDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.exception.HttpResponse;
 import com.dnpa.chess.mapper.UserMapper;
@@ -62,10 +63,10 @@ public class UserApi {
 		
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable(name = "id") int id, @Valid @RequestBody SignUpDto signUpDto) {
+	@PutMapping
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDto signUpDto) throws Exception {
 		//TODO: process PUT request
-		User user = userService.getUserById(id);
+		User user = userService.getUserById(signUpDto.getId());
 		
 		if (user == null) {
 			return ResponseEntity.badRequest().body(new HttpResponse("Không tìm thấy"));
@@ -73,11 +74,11 @@ public class UserApi {
 		user.setEmail( signUpDto.getEmail() );
         user.setGioiTinh( signUpDto.isGioiTinh() );
         user.setHoTen( signUpDto.getHoTen() );
-        user.setPassword( signUpDto.getPassword() );
-        user.setSoDienThoai( signUpDto.getSoDienThoai() );
+        user.setPassword( signUpDto.getPassword());
+        user.setSoDienThoai( signUpDto.getSoDienThoai());
         user.setUsername( signUpDto.getUsername() );
 		
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(userService.updateUser(user));
 		
 	}
 	@DeleteMapping("/{id}")

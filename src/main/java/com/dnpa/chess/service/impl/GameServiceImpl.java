@@ -140,7 +140,7 @@ public class GameServiceImpl implements GameService{
 			Level level = levelRepository.findById(gameDto.getLevelId()).get();
 			
 			Algorithm algorithm = level.getAlgorithm();
-			String exePath = algorithm.getPath();
+			String exePath = "src/main/resources/static/engine/" + algorithm.getPath();
 	        int depth = level.getDepth();
 	        System.out.println("ai");
 	        

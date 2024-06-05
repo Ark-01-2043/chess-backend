@@ -28,4 +28,5 @@ public interface UserService {
 	public User updateProfile(User user) throws Exception;
 	User changePassword(String token, ChangePasswordDto changePasswordDto) throws Exception;
 	List<User> getAllUsersNotAdmin();
+	User updateUser(User user);
 }
