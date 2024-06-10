@@ -3,10 +3,12 @@ package com.dnpa.chess.entity;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +29,7 @@ public class Game {
 	private String winner;
 	private String result;
 	private int resultInt;
+	@Column(length = 1500)
 	private String move;
 	@ManyToOne(targetEntity = Level.class)
 	private Level level;

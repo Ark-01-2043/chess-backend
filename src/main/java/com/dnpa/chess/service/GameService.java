@@ -16,4 +16,5 @@ public interface GameService {
 	public String generateNextMove(GameDto gameDto) throws IOException, InterruptedException;
 	OverallDetail getOverallDetails(String token);
 	List<Game> getHistory(String token);
+	List<Game> getHistoryByUserUd(int id);
 }

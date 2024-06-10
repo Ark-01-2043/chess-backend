@@ -28,6 +28,7 @@ import com.dnpa.chess.repository.LevelRepository;
 import com.dnpa.chess.repository.UserRepo;
 import com.dnpa.chess.security.JwtTokenProvider;
 import com.dnpa.chess.service.GameService;
+import com.dnpa.chess.service.UserService;
 @Service
 public class GameServiceImpl implements GameService{
 	@Autowired
@@ -36,6 +37,8 @@ public class GameServiceImpl implements GameService{
 	private UserRepo userRepo;
 	@Autowired
 	private LevelRepository levelRepository;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
@@ -76,7 +79,7 @@ public class GameServiceImpl implements GameService{
 	public List<RankingDto> getRanking() {
 		// TODO Auto-generated method stub
 		List<RankingDto> rankingDtos = new ArrayList<RankingDto>();
-		List<User> users = userRepo.findAll();
+		List<User> users = userService.getAllUsersNotAdmin();
 		for (User user : users) {
 			List<Game> games = gameRepository.findByUser(user);
 			RankingDto rankingDto = new RankingDto();
@@ -91,8 +94,8 @@ public class GameServiceImpl implements GameService{
 					score -= game.getLevel().getId();
 				}
 			}
-			rankingDto.setScore(score);
-		}
+			rankingDto.setScore(score >= 0? score: 0);
+			rankingDtos.add(rankingDto);		}
 		rankingDtos.sort(new Comparator<RankingDto>() {
 
 			@Override
@@ -127,6 +130,7 @@ public class GameServiceImpl implements GameService{
             } else {
                 
                 rankingDto.setRank(currentRank);
+                currentRank++;
             }
         }
 		return rankingDtos;
@@ -167,6 +171,11 @@ public class GameServiceImpl implements GameService{
 	@Override
 	public List<Game> getHistory(String token){
 		User user = userRepo.findByUsername(jwtTokenProvider.getUserNameFromJwtToken(token)).get(0);
+		return gameRepository.findByUser(user);
+	}
+	@Override
+	public List<Game> getHistoryByUserUd(int id){
+		User user = userRepo.findById(id).get();
 		return gameRepository.findByUser(user);
 	}
 	@Override

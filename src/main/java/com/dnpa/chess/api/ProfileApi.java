@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -52,6 +53,13 @@ public class ProfileApi {
 	public ResponseEntity<ResponseObject> getHistory(@RequestHeader("Authorization") String authString){
 		String token = authString.substring(7);
 		return ResponseEntity.ok(ResponseObject.builder().data(gameService.getHistory(token))
+														.message("Lấy lịch sử")
+														.status(HttpStatus.OK).build());
+	}
+	@GetMapping("/history/{id}")
+	public ResponseEntity<ResponseObject> getHistoryById(@PathVariable("id") int id){
+		
+		return ResponseEntity.ok(ResponseObject.builder().data(gameService.getHistoryByUserUd(id))
 														.message("Lấy lịch sử")
 														.status(HttpStatus.OK).build());
 	}
