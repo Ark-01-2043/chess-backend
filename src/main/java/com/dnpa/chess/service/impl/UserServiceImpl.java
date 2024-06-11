@@ -24,7 +24,6 @@ import com.dnpa.chess.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 @Service
-@Slf4j
 public class UserServiceImpl implements UserService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -156,7 +155,6 @@ public class UserServiceImpl implements UserService{
 		} else {
 			user.setPassword(userRepository.findById(user.getId()).get().getPassword());
 		}
-		log.info("new passowrd" + user.getPassword());
 		System.out.println(("new passowrd" + user.getPassword()));
 		return userRepository.save(user);
 	}
