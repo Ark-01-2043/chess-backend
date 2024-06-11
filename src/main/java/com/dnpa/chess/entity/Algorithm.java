@@ -14,10 +14,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
 public class Algorithm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,34 @@ public class Algorithm {
 	private String name;
 	@NotBlank(message = "File không để trống")
 	private String path;
+	public Algorithm(Integer id, @NotBlank(message = "Tên không để trống") String name,
+			@NotBlank(message = "File không để trống") String path) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.path = path;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public Algorithm() {
+		super();
+	}
 	
 	
 }

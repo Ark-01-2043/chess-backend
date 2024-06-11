@@ -4,15 +4,13 @@ import com.dnpa.chess.dto.GameDto;
 import com.dnpa.chess.dto.SignInDto;
 import com.dnpa.chess.dto.SignUpDto;
 import com.dnpa.chess.entity.Game;
-import com.dnpa.chess.entity.Game.GameBuilder;
 import com.dnpa.chess.entity.User;
-import com.dnpa.chess.entity.User.UserBuilder;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-10T09:39:59+0700",
+    date = "2024-06-11T17:07:16+0700",
     comments = "version: 1.4.1.Final, compiler: Eclipse JDT (IDE) 3.36.0.v20231114-0937, environment: Java 17.0.9 (Oracle Corporation)"
 )
 @Component
@@ -24,17 +22,17 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        UserBuilder user = User.builder();
+        User user = new User();
 
-        user.email( signUpDto.getEmail() );
-        user.gioiTinh( signUpDto.isGioiTinh() );
-        user.hoTen( signUpDto.getHoTen() );
-        user.id( signUpDto.getId() );
-        user.password( signUpDto.getPassword() );
-        user.soDienThoai( signUpDto.getSoDienThoai() );
-        user.username( signUpDto.getUsername() );
+        user.setEmail( signUpDto.getEmail() );
+        user.setGioiTinh( signUpDto.isGioiTinh() );
+        user.setHoTen( signUpDto.getHoTen() );
+        user.setId( signUpDto.getId() );
+        user.setPassword( signUpDto.getPassword() );
+        user.setSoDienThoai( signUpDto.getSoDienThoai() );
+        user.setUsername( signUpDto.getUsername() );
 
-        return user.build();
+        return user;
     }
 
     @Override
@@ -43,12 +41,12 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        UserBuilder user = User.builder();
+        User user = new User();
 
-        user.password( signInDto.getPassword() );
-        user.username( signInDto.getUsername() );
+        user.setPassword( signInDto.getPassword() );
+        user.setUsername( signInDto.getUsername() );
 
-        return user.build();
+        return user;
     }
 
     @Override
@@ -57,14 +55,14 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        GameBuilder game = Game.builder();
+        Game game = new Game();
 
-        game.id( gameDto.getId() );
-        game.move( gameDto.getMove() );
-        game.playerSide( gameDto.getPlayerSide() );
-        game.result( gameDto.getResult() );
-        game.winner( gameDto.getWinner() );
+        game.setId( gameDto.getId() );
+        game.setMove( gameDto.getMove() );
+        game.setPlayerSide( gameDto.getPlayerSide() );
+        game.setResult( gameDto.getResult() );
+        game.setWinner( gameDto.getWinner() );
 
-        return game.build();
+        return game;
     }
 }

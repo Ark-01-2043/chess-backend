@@ -26,5 +26,13 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String roleName;
+	public Role(Integer id, String roleName) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
+	}
+	public Role() {
+		super();
+	}
 	
 }
