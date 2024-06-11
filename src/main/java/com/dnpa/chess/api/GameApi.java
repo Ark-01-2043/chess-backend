@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import com.dnpa.chess.dto.GameDto;
 import com.dnpa.chess.dto.ResponseObject;
@@ -52,9 +53,7 @@ public class GameApi {
 	public ResponseEntity<?> makeMove1(@RequestBody GameDto gameDto){
 		try {
 			
-	        return ResponseEntity.ok(ResponseObject.builder().data(gameService.generateNextMove(gameDto))
-	        												.message("Nước đi kế tiếp")
-	        												.status(HttpStatus.OK).build());
+	        return ResponseEntity.ok(new ResponseObject("Nước đi kế tiếp", HttpStatus.OK, gameService.generateNextMove(gameDto)));
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

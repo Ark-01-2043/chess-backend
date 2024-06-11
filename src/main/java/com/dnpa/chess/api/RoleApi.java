@@ -1,6 +1,7 @@
 package com.dnpa.chess.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,6 @@ public class RoleApi {
 	@PostMapping
 	public ResponseEntity<?> add(@RequestBody Role role){
 		roleService.addRole(role);
-		return ResponseEntity.ok(ResponseObject.builder().message("Thêm thành công").build());
+		return ResponseEntity.ok(new ResponseObject("Thêm thành công", HttpStatus.OK, null));
 	}
 }

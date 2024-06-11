@@ -19,7 +19,7 @@ import com.dnpa.chess.dto.SignUpDto;
 import com.dnpa.chess.dto.UpdateUserDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.exception.HttpResponse;
-import com.dnpa.chess.mapper.UserMapper;
+//import com.dnpa.chess.mapper.UserMapper;
 import com.dnpa.chess.repository.UserRepo;
 import com.dnpa.chess.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +33,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserApi {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private UserMapper userMapper;
+//	@Autowired
+//	private UserMapper userMapper;
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllUser(){
 		return ResponseEntity.ok(userService.getAllUsers());
@@ -44,7 +44,7 @@ public class UserApi {
 		User user = userService.getUserById(id);
 		if (user == null) {
 			
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Không tìm thấy").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Không tìm thấy", HttpStatus.BAD_REQUEST, null));
 		}
 		return ResponseEntity.ok(user);
 	}
@@ -52,12 +52,19 @@ public class UserApi {
 	public ResponseEntity<?> addUser(@Valid @RequestBody SignUpDto signUpDto) {
 		//TODO: process POST request
 		if (userService.findUserByUsername(signUpDto.getUsername()) != null) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Tên đăng nhập đã tồn tại").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Tên đăng nhập đã tồn tại", HttpStatus.OK, null));
 		}
 		if (userService.findUserByEmail(signUpDto.getEmail()) != null) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Email đã tồn tại").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Email đã tồn tại", HttpStatus.OK, null));
 		}
-		User user = userMapper.map(signUpDto);
+		User user = new User();
+		user.setHoTen(signUpDto.getHoTen());
+		user.setUsername(signUpDto.getUsername());
+		user.setEmail(signUpDto.getEmail());
+		user.setGioiTinh(signUpDto.isGioiTinh());
+		user.setPassword(signUpDto.getPassword());
+		user.setSoDienThoai(signUpDto.getSoDienThoai());
+		
 		userService.addUser(user);
 		return ResponseEntity.ok(userService.findUserByUsername(signUpDto.getUsername()));
 		
@@ -71,6 +78,7 @@ public class UserApi {
 		if (user == null) {
 			return ResponseEntity.badRequest().body(new HttpResponse("Không tìm thấy"));
 		}
+		user.setId(signUpDto.getId());
 		user.setEmail( signUpDto.getEmail() );
         user.setGioiTinh( signUpDto.isGioiTinh() );
         user.setHoTen( signUpDto.getHoTen() );
@@ -85,15 +93,13 @@ public class UserApi {
 	public ResponseEntity<?> deleteUserById(@PathVariable(name = "id") int id) {
 		User user = userService.getUserById(id);
 		if (user == null) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Không tìm thấy").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Không tìm thấy", HttpStatus.OK, null));
 		}
 		userService.deleteUser(id);
 		return ResponseEntity.ok(user);
 	}
 	@GetMapping
 	public ResponseEntity<ResponseObject> getAllUsers(){
-		return ResponseEntity.ok(ResponseObject.builder().data(userService.getAllUsersNotAdmin())
-														.message("Danh sách người dùng")
-														.status(HttpStatus.OK).build());
+		return ResponseEntity.ok(new ResponseObject("Danh sách người dùng", HttpStatus.OK,userService.getAllUsersNotAdmin()));
 	}
 }

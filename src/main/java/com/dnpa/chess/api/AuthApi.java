@@ -35,7 +35,7 @@ import com.dnpa.chess.dto.SignInDto;
 import com.dnpa.chess.dto.SignUpDto;
 import com.dnpa.chess.entity.User;
 import com.dnpa.chess.exception.HttpResponse;
-import com.dnpa.chess.mapper.UserMapper;
+//import com.dnpa.chess.mapper.UserMapper;
 import com.dnpa.chess.repository.UserRepo;
 import com.dnpa.chess.service.UserService;
 
@@ -47,20 +47,28 @@ public class AuthApi {
 	
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private UserMapper userMapper;
+//	@Autowired
+//	private UserMapper userMapper;
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto){
 		System.out.println("sign up");
 //		System.out.println(authentication);
 		
 		if (userService.findUserByUsername(signUpDto.getUsername()) != null) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Tên đăng nhập đã tồn tại").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Tên đăng nhập đã tồn tại", HttpStatus.BAD_REQUEST, null));
 		}
 		if (userService.findUserByEmail(signUpDto.getEmail()) != null) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message(("Email đã tồn tại")).build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Email đã tồn tại", HttpStatus.BAD_REQUEST, null));
 		}
-		User user = userMapper.map(signUpDto);
+//		User user = userMapper.map(signUpDto);
+		User user = new User();
+		user.setId(signUpDto.getId());
+		user.setHoTen(signUpDto.getHoTen());
+		user.setUsername(signUpDto.getUsername());
+		user.setEmail(signUpDto.getEmail());
+		user.setGioiTinh(signUpDto.isGioiTinh());
+		user.setPassword(signUpDto.getPassword());
+		user.setSoDienThoai(signUpDto.getSoDienThoai());
 		userService.addUser(user);
 		return ResponseEntity.ok(userService.findUserByUsername(signUpDto.getUsername()));
 	}
@@ -76,21 +84,21 @@ public class AuthApi {
 			}
 			if (authentication != null) {
 				System.out.println("Signed in");
-				return ResponseEntity.badRequest().body(ResponseObject.builder().message("Đã đăng nhập").build());
+				return ResponseEntity.badRequest().body(new ResponseObject("Đã đăng nhập", HttpStatus.OK, null));
 			}
-			return ResponseEntity.ok(userService.loginAsUser(userMapper.map(signInDto)));
+			return ResponseEntity.ok(userService.loginAsUser(new User(null, null, signInDto.getUsername(), signInDto.getPassword(), null, null, false, null)));
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e);
 //			throw new ResourceException("Sai thông tin đăng nhập");
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Sai thông tin đăng nhập").build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Sai thông tin đăng nhập", HttpStatus.BAD_REQUEST, null));
 		}
 		
 	}
 	@GetMapping("/signout")
 	public ResponseEntity<?> signOut(HttpServletRequest request, HttpServletResponse response){
 		userService.logOutAsUser(request, response);
-		return ResponseEntity.ok(ResponseObject.builder().message("Đăng xuất thành công").build()); 
+		return ResponseEntity.ok(new ResponseObject("Đăng xuất thành công", HttpStatus.OK, null)); 
 	}
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -103,7 +111,7 @@ public class AuthApi {
 		}
 	    System.out.println("method: " + ex.getMessage());
 //	    throw new ResourceException(ex.getMessage());
-	    return ResponseEntity.badRequest().body(ResponseObject.builder().message(ex.getMessage()).build());
+	    return ResponseEntity.badRequest().body(new ResponseObject(ex.getMessage(), HttpStatus.BAD_REQUEST, null));
 	}
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -111,7 +119,7 @@ public class AuthApi {
 		MethodArgumentNotValidException ex) {
 	    System.out.println("method: " + ex.getAllErrors().get(0).getDefaultMessage());
 //	    throw new ResourceException(ex.getAllErrors().get(0).getDefaultMessage());
-	    return ResponseEntity.badRequest().body(ResponseObject.builder().message(ex.getAllErrors().get(0).getDefaultMessage()).build());
+	    return ResponseEntity.badRequest().body(new ResponseObject(ex.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST, null));
 	}
 
 	

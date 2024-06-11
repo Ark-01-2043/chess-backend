@@ -22,7 +22,7 @@ import com.dnpa.chess.dto.ThongKeCheDo;
 import com.dnpa.chess.entity.Game;
 import com.dnpa.chess.entity.Level;
 import com.dnpa.chess.entity.User;
-import com.dnpa.chess.mapper.UserMapper;
+//import com.dnpa.chess.mapper.UserMapper;
 import com.dnpa.chess.repository.GameRepository;
 import com.dnpa.chess.repository.LevelRepository;
 import com.dnpa.chess.repository.UserRepo;
@@ -39,8 +39,8 @@ public class GameServiceImpl implements GameService{
 	private LevelRepository levelRepository;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private UserMapper userMapper;
+//	@Autowired
+//	private UserMapper userMapper;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	@Override
@@ -52,7 +52,7 @@ public class GameServiceImpl implements GameService{
 	@Override
 	public Game saveGame(GameDto gameDto) {
 		// TODO Auto-generated method stub
-		Game game = userMapper.map(gameDto);
+		Game game = new Game(0, null, gameDto.getPlayerSide(), gameDto.getWinner(), gameDto.getResult(), 0, gameDto.getMove(), null, null);
 		game.setLevel(levelRepository.findById(gameDto.getLevelId()).get());
 		game.setUser(userRepo.findById(gameDto.getUserId()).get());
 		game.setGameDate(LocalDateTime.now());
@@ -183,10 +183,10 @@ public class GameServiceImpl implements GameService{
 		User user = userRepo.findByUsername(jwtTokenProvider.getUserNameFromJwtToken(token)).get(0);
 		List<Game> games = gameRepository.findByUser(user);
 		List<ThongKeCheDo> list = new ArrayList<ThongKeCheDo>();
-		list.add(ThongKeCheDo.builder().levelId(1).win(0).draw(0).lose(0).build());
-		list.add(ThongKeCheDo.builder().levelId(2).win(0).draw(0).lose(0).build());
-		list.add(ThongKeCheDo.builder().levelId(3).win(0).draw(0).lose(0).build());
-		games.stream().forEach((game) -> {
+		list.add(new ThongKeCheDo(1, 0, 0, 0));
+		list.add(new ThongKeCheDo(2, 0, 0, 0));
+		list.add(new ThongKeCheDo(3, 0, 0, 0));
+		for(Game game: games) {
 			int win = list.get(game.getLevel().getId() - 1).getWin();
 			int draw = list.get(game.getLevel().getId() - 1).getDraw();
 			int lose = list.get(game.getLevel().getId() - 1).getLose();
@@ -197,9 +197,8 @@ public class GameServiceImpl implements GameService{
 			} else {
 				list.get(game.getLevel().getId() - 1).setDraw(draw + 1);
 			}
-		});
-		return OverallDetail.builder().user(user)
-									.thongke(list).build();
+		}
+		return new OverallDetail(user, list);
 									
 	}
 }

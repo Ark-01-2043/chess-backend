@@ -37,15 +37,12 @@ public class LevelApi {
 	}
 	@PostMapping
 	public ResponseEntity<ResponseObject> addLevel(@RequestBody LevelDto levelDto){
-		Level level = Level.builder().algorithm(algorithmService.getAlgorithmById(levelDto.getAlgorithmId()))
-									.depth(levelDto.getDepth())
-									.name(levelDto.getName())
-									.build();
+		Level level = new Level();
+		level.setAlgorithm(algorithmService.getAlgorithmById(levelDto.getAlgorithmId()));
+		level.setDepth(levelDto.getDepth());
+		level.setName(levelDto.getName());
 		Level newLevel = levelService.saveLevel(level);
-		return ResponseEntity.ok(ResponseObject.builder().data(newLevel)
-														.message("Thêm thành công")
-														.status(HttpStatus.OK)
-														.build());		
+		return ResponseEntity.ok(new ResponseObject("Thêm thành công", HttpStatus.OK, newLevel));		
 	}
 	@PutMapping
 	public ResponseEntity<?> put(@RequestBody LevelDto levelDto){

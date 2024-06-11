@@ -14,9 +14,8 @@ import com.dnpa.chess.dto.ResponseObject;
 public class ExceptionHandlerController {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResponseObject> handle(Exception ex, WebRequest request){
-		return ResponseEntity.badRequest().body(ResponseObject.builder().data(ex.getMessage())
-																.message(ex.getMessage())
-																.status(HttpStatus.BAD_REQUEST)
-																.build());
+		return ResponseEntity.badRequest().body(new ResponseObject(ex.getMessage(),
+																HttpStatus.BAD_REQUEST
+															,ex.getMessage()));
 	}
 }

@@ -66,17 +66,16 @@ public class AlgorithmApi {
 			){
 		
 		if (multipartFile.isEmpty()) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().message("Không được để trống").status(HttpStatus.BAD_REQUEST).build());
+			return ResponseEntity.badRequest().body(new ResponseObject("Không được để trống", HttpStatus.BAD_REQUEST, null));
 			
 		}
 		Algorithm algorithm = new Algorithm();
+		algorithm.setId(0);
 		algorithm.setName(name);	
 		saveToStatic(multipartFile, multipartFile.getOriginalFilename());
 		algorithm.setPath(multipartFile.getOriginalFilename());
 		if (!testFile("src/main/resources/static/engine/" + multipartFile.getOriginalFilename())) {
-			return ResponseEntity.badRequest().body(ResponseObject.builder().data(algorithm)
-																	.message("File không hợp lệ")
-																	.status(HttpStatus.BAD_REQUEST).build());
+			return ResponseEntity.badRequest().body(new ResponseObject("File không hợp lệ", HttpStatus.BAD_REQUEST, algorithm));
 		}
 		
 		algorithmService.saveAlgorithm(algorithm);

@@ -85,5 +85,22 @@ public class GameDto {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+
+	public GameDto(int id, String playerSide, String result, String winner, String move, String fen, int levelId,
+			int userId) {
+		super();
+		this.id = id;
+		this.playerSide = playerSide;
+		this.result = result;
+		this.winner = winner;
+		this.move = move;
+		this.fen = fen;
+		this.levelId = levelId;
+		this.userId = userId;
+	}
+
+	public GameDto() {
+		super();
+	}
 	
 }
