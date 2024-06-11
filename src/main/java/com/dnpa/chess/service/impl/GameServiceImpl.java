@@ -56,10 +56,10 @@ public class GameServiceImpl implements GameService{
 		game.setLevel(levelRepository.findById(gameDto.getLevelId()).get());
 		game.setUser(userRepo.findById(gameDto.getUserId()).get());
 		game.setGameDate(LocalDateTime.now());
-		if (gameDto.getWinner() == "0") {
+		if (gameDto.getWinner().equals("0")) {
 			game.setResultInt(0);
 		} else {
-			if (gameDto.getWinner().equals(gameDto.getPlayerSide())) {
+			if (gameDto.getWinner().equals(gameDto.getPlayerSide().substring(0, 1))) {
 				game.setResultInt(1);
 			} else {
 				game.setResultInt(-1);
